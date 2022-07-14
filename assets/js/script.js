@@ -5,18 +5,18 @@ document.addEventListener("DOMContentLoaded", function() {
     let buttons = document.getElementsByTagName("button");
     
     for (let button of buttons) {
-        button.addEventListener("click", function () {
-            if(this.getAttribute("data-type") === "submit") {
+        button.addEventListener("click", function() {
+            if (this.getAttribute("data-type") === "submit") {
                 checkAnswer();
             } else {
                 let gameType = this.getAttribute("data-type");
                 alert(`You clicked ${gameType}`);
-                runGame(gameType)
+                runGame(gameType);
             }
-        })
+        });
     }
     runGame("addition");
-})
+});
 /**
  * The main game "loop", called when the script is first loaded 
  * and after the user's answer has been processed
@@ -30,6 +30,8 @@ function runGame(gameType) {
         displayAdditionQuestion(num1, num2);
     } else if (gameType === "multiply") {
         displayMultiplyQuestion(num1, num2);
+    } else if (gameType === "subtract" ) {
+        displaySubtractQuestion(num1, num2); 
     } else {
         alert(`Unknown game type: ${gameType}`);
         throw `Unknown game type: ${gameType}. Aborting!`;
@@ -38,7 +40,7 @@ function runGame(gameType) {
 
 
 /**
- * Checks the answer agaist the first element in 
+ * Checks the answer against the first element in 
  * the returned calculatecorrectAnswer array
  */
 function checkAnswer() {
@@ -47,11 +49,11 @@ function checkAnswer() {
     let calculatedAnswer = calculateCorrectAnswer();
     let isCorrect = userAnswer === calculatedAnswer[0];
 
-    if(isCorrect) {
+    if (isCorrect) {
         alert("Hey! You got it right!  :D");
         incrementScore();
     } else {
-        alert(`Awww...you answered ${userAnswer}. The correct answer was ${calculatedAnswer[0]}!`);
+        alert(`Awww....you answered ${userAnswer}. The correct answer was ${calculatedAnswer[0]}!`);
         incrementWrongAnswer();
     }
     runGame(calculatedAnswer[1]);
@@ -68,7 +70,9 @@ function calculateCorrectAnswer() {
     if (operator === "+") {
         return [operand1 + operand2, "addition"];
     } else if (operator === "x") {
-        return [operand1 + operand2, "multiply"];
+        return [operand1 * operand2, "multiply"];
+    } else if (operator === "-") {
+        return [operand1 - operand2, "subtract"];
     } else {
         alert(`Unimplemented operator ${operator}`);
         throw `Unimplemented operator ${operator}. Aborting!`;
@@ -85,7 +89,7 @@ function incrementScore() {
 }
 
 /**
- * Gets the current tally of incorrect from the DOM and increments it by 1
+ * Gets the current tally of incorrect answer from the DOM and increments it by 1
  */
 function incrementWrongAnswer() {
 
@@ -101,7 +105,10 @@ function displayAdditionQuestion(operand1, operand2) {
 
 }
 
-function displaySubtractQuestion() {
+function displaySubtractQuestion(operand1, operand2) {
+    document.getElementById("operand1").textContent = operand1 > operand2 ? operand1 : operand2;
+    document.getElementById("operand2").textContent = operand1 > operand2 ? operand2 : operand1;
+    document.getElementById('operator').textContent = "-";
 
 }
 
